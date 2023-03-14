@@ -116,9 +116,9 @@ public class SeleniumWebDriverTests {
             mouseClick.moveToElement(checkboxReading).click().perform();
         }
 
-        String checkboxSportLabel = driver.findElement(By.cssSelector("#hobbies-checkbox-1")).getText();
-        String checkboxReadingLabel = driver.findElement(By.cssSelector("#hobbies-checkbox-2")).getText();
-        String checkboxMusicLabel = driver.findElement(By.cssSelector("#hobbies-checkbox-3")).getText();
+        String checkboxSportLabel = driver.findElement(By.cssSelector("[for='hobbies-checkbox-1']")).getText();
+        String checkboxReadingLabel = driver.findElement(By.cssSelector("[for='hobbies-checkbox-2']")).getText();
+        String checkboxMusicLabel = driver.findElement(By.cssSelector("[for='hobbies-checkbox-3']")).getText();
 
         File testPicture = new File("src/test/java/ru/academits/" + pictureName);
         WebElement pictureUploadButton = driver.findElement(By.cssSelector("#uploadPicture"));
