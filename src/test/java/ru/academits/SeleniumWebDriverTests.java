@@ -160,6 +160,7 @@ public class SeleniumWebDriverTests {
         //Assert Date of Birth
         String submittedFormBirthDate = driver.findElement(By.cssSelector("tr:nth-child(5) td:nth-child(2)")).getText();
         String[] splitDateWords = fullBirthDate.split(" ");
+
         for (String splitDateWord : splitDateWords) {
             Assertions.assertTrue(submittedFormBirthDate.contains(splitDateWord));
         }
