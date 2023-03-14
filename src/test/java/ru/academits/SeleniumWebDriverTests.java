@@ -54,8 +54,8 @@ public class SeleniumWebDriverTests {
         String subject1 = "Maths";
         String subject2 = "English";
         boolean selectedHobbySport = false;
-        boolean selectedHobbyMusic = true;
-        boolean selectedHobbyReading = true;
+        boolean selectedHobbyMusic = false;
+        boolean selectedHobbyReading = false;
         String pictureName = "picture.jpg";
         String currentAddress = "Novosibirsk Tsvetnoi Proezd 6, 7";
         String state = "NCR";
@@ -172,17 +172,24 @@ public class SeleniumWebDriverTests {
 
         //Assert Hobbies
         String submittedFormHobbies = driver.findElement(By.cssSelector("tr:nth-child(7) td:nth-child(2)")).getText();
+        String emptyString = "";
 
         if (selectedHobbySport) {
             Assertions.assertTrue(submittedFormHobbies.contains(checkboxSportLabel));
+        } else {
+            Assertions.assertEquals(submittedFormHobbies, emptyString);
         }
 
         if (selectedHobbyMusic) {
             Assertions.assertTrue(submittedFormHobbies.contains(checkboxMusicLabel));
+        } else {
+            Assertions.assertEquals(submittedFormHobbies, emptyString);
         }
 
         if (selectedHobbyReading) {
             Assertions.assertTrue(submittedFormHobbies.contains(checkboxReadingLabel));
+        } else {
+            Assertions.assertTrue(submittedFormHobbies.equals(emptyString));
         }
 
         //Assert Picture Upload
