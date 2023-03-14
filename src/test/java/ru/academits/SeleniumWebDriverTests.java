@@ -1,7 +1,10 @@
 package ru.academits;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -11,7 +14,6 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
@@ -40,74 +42,96 @@ public class SeleniumWebDriverTests {
 
     @Test
     public void demoqaFormFillingTest() {
-        WebElement firstNameInput = driver.findElement(By.cssSelector("#firstName"));
+        //Test Data
         String firstName = "Egor";
+        String lastName = "Aleksandrov";
+        String email = "egor@gmail.com";
+        String gender = "Male";
+        String mobileNumber = "9139999999";
+        String birthDay = "01";
+        String birthMonth = "April";
+        String birthYear = "1983";
+        String subject1 = "Maths";
+        String subject2 = "English";
+        boolean selectedHobbySport = false;
+        boolean selectedHobbyMusic = true;
+        boolean selectedHobbyReading = true;
+        String pictureName = "picture.jpg";
+        String currentAddress = "Novosibirsk Tsvetnoi Proezd 6, 7";
+        String state = "NCR";
+        String city = "Delhi";
+
+        WebElement firstNameInput = driver.findElement(By.cssSelector("#firstName"));
         firstNameInput.sendKeys(firstName);
 
         WebElement lastNameInput = driver.findElement(By.cssSelector("#lastName"));
-        String lastName = "Aleksandrov";
         lastNameInput.sendKeys(lastName);
 
         WebElement emailInput = driver.findElement(By.cssSelector("#userEmail"));
-        String email = "egor@gmail.com";
         emailInput.sendKeys(email);
 
-        WebElement setMaleGender = driver.findElement(By.cssSelector("[for='gender-radio-1']"));
-        String maleGender = setMaleGender.getText();
         Actions mouseClick = new Actions(driver);
-        mouseClick.moveToElement(setMaleGender).click().perform();
+
+        if (gender.equals("Male")) {
+            WebElement setMaleGender = driver.findElement(By.cssSelector("[for='gender-radio-1']"));
+            mouseClick.moveToElement(setMaleGender).click().perform();
+        }
+
+        if (gender.equals("Female")) {
+            WebElement setFemaleGender = driver.findElement(By.cssSelector("[for='gender-radio-2']"));
+            mouseClick.moveToElement(setFemaleGender).click().perform();
+        }
+
+        if (gender.equals("Other")) {
+            WebElement setOtherGender = driver.findElement(By.cssSelector("[for='gender-radio-3']"));
+            mouseClick.moveToElement(setOtherGender).click().perform();
+        }
 
         WebElement mobileNumberInput = driver.findElement(By.cssSelector("#userNumber"));
-        String mobileNumber = "9139999999";
         mobileNumberInput.sendKeys(mobileNumber);
 
         WebElement birthDateInput = driver.findElement(By.cssSelector("#dateOfBirthInput"));
-        birthDateInput.click();
-
-        WebElement year = driver.findElement(By.cssSelector(".react-datepicker__year-select"));
-        Select yearSelect = new Select(year);
-        String birthYear = "1983";
-        yearSelect.selectByValue(birthYear);
-
-        WebElement month = driver.findElement(By.cssSelector(".react-datepicker__month-select"));
-        Select monthSelect = new Select(month);
-        String birthMonth = "April";
-        monthSelect.selectByVisibleText(birthMonth);
-
-        WebElement birthDay = driver.findElement(By.cssSelector("[aria-label='Choose Friday, April 1st, 1983']"));
-        mouseClick.moveToElement(birthDay).click().perform();
-        WebElement getBirthdayInfo = driver.findElement(By.cssSelector("#dateOfBirthInput"));
-        String birthDayInfo = getBirthdayInfo.getAttribute("value");
+        birthDateInput.sendKeys(Keys.CONTROL + "a");
+        birthDateInput.sendKeys(birthDay + " " + birthMonth + " " + birthYear);
+        String fullBirthDate = birthDateInput.getAttribute("value");
 
         WebElement subjectsInput = driver.findElement(By.cssSelector(".subjects-auto-complete__input [aria-autocomplete='list']"));
-        String subjectMaths = "Maths";
-        subjectsInput.sendKeys(subjectMaths);
+        subjectsInput.sendKeys(subject1);
         subjectsInput.sendKeys(Keys.RETURN);
-        String subjectEnglish = "English";
-        subjectsInput.sendKeys(subjectEnglish);
+        subjectsInput.sendKeys(subject2);
         subjectsInput.sendKeys(Keys.RETURN);
 
-        WebElement checkboxMusic = driver.findElement(By.cssSelector("#hobbies-checkbox-3"));
-        mouseClick.moveToElement(checkboxMusic).click().perform();
+        if (selectedHobbySport) {
+            WebElement checkboxReading = driver.findElement(By.cssSelector("#hobbies-checkbox-1"));
+            mouseClick.moveToElement(checkboxReading).click().perform();
+        }
 
-        WebElement checkboxReading = driver.findElement(By.cssSelector("#hobbies-checkbox-2"));
-        mouseClick.moveToElement(checkboxReading).click().perform();
+        if (selectedHobbyMusic) {
+            WebElement checkboxMusic = driver.findElement(By.cssSelector("#hobbies-checkbox-3"));
+            mouseClick.moveToElement(checkboxMusic).click().perform();
+        }
 
-        File testPicture = new File("src/test/java/ru/academits/picture.jpg");
+        if (selectedHobbyReading) {
+            WebElement checkboxReading = driver.findElement(By.cssSelector("#hobbies-checkbox-2"));
+            mouseClick.moveToElement(checkboxReading).click().perform();
+        }
+
+        String checkboxSportLabel = driver.findElement(By.cssSelector("#hobbies-checkbox-1")).getText();
+        String checkboxReadingLabel = driver.findElement(By.cssSelector("#hobbies-checkbox-2")).getText();
+        String checkboxMusicLabel = driver.findElement(By.cssSelector("#hobbies-checkbox-3")).getText();
+
+        File testPicture = new File("src/test/java/ru/academits/" + pictureName);
         WebElement pictureUploadButton = driver.findElement(By.cssSelector("#uploadPicture"));
         pictureUploadButton.sendKeys(testPicture.getAbsolutePath());
 
-        String currentAddress = "Novosibirsk Tsvetnoi Proezd 6, 7";
         WebElement currentAddressInput = driver.findElement(By.cssSelector("#currentAddress"));
         currentAddressInput.sendKeys(currentAddress);
 
         WebElement stateSelect = driver.findElement(By.cssSelector("#react-select-3-input"));
-        String state = "NCR";
         stateSelect.sendKeys(state);
         stateSelect.sendKeys(Keys.RETURN);
 
         WebElement citySelect = driver.findElement(By.cssSelector("#react-select-4-input"));
-        String city = "Delhi";
         citySelect.sendKeys(city);
         citySelect.sendKeys(Keys.RETURN + "\n");
 
@@ -126,7 +150,7 @@ public class SeleniumWebDriverTests {
 
         //Assert Gender
         String submittedFormGender = driver.findElement(By.cssSelector("tr:nth-child(3) td:nth-child(2)")).getText();
-        Assertions.assertEquals(maleGender, submittedFormGender);
+        Assertions.assertEquals(gender, submittedFormGender);
 
         //Assert Mobile Number
         String submittedFormMobileNumber = driver.findElement(By.cssSelector("tr:nth-child(4) td:nth-child(2)")).getText();
@@ -135,24 +159,34 @@ public class SeleniumWebDriverTests {
 
         //Assert Date of Birth
         String submittedFormBirthDate = driver.findElement(By.cssSelector("tr:nth-child(5) td:nth-child(2)")).getText();
-        String[] splitDateWords = birthDayInfo.split(" ");
+        String[] splitDateWords = fullBirthDate.split(" ");
         for (String splitDateWord : splitDateWords) {
             Assertions.assertTrue(submittedFormBirthDate.contains(splitDateWord));
         }
 
         //Assert Subjects
         String submittedFormSubjects = driver.findElement(By.cssSelector("tr:nth-child(6) td:nth-child(2)")).getText();
-        Assertions.assertTrue(submittedFormSubjects.contains(subjectMaths));
-        Assertions.assertTrue(submittedFormSubjects.contains(subjectEnglish));
+        Assertions.assertTrue(submittedFormSubjects.contains(subject1));
+        Assertions.assertTrue(submittedFormSubjects.contains(subject2));
 
         //Assert Hobbies
         String submittedFormHobbies = driver.findElement(By.cssSelector("tr:nth-child(7) td:nth-child(2)")).getText();
-        Assertions.assertTrue(submittedFormHobbies.contains("Music"));
-        Assertions.assertTrue(submittedFormHobbies.contains("Reading"));
+
+        if (selectedHobbySport) {
+            Assertions.assertTrue(submittedFormHobbies.contains(checkboxSportLabel));
+        }
+
+        if (selectedHobbyMusic) {
+            Assertions.assertTrue(submittedFormHobbies.contains(checkboxMusicLabel));
+        }
+
+        if (selectedHobbyReading) {
+            Assertions.assertTrue(submittedFormHobbies.contains(checkboxReadingLabel));
+        }
 
         //Assert Picture Upload
         String submittedFormUploadPicture = driver.findElement(By.cssSelector("tr:nth-child(8) td:nth-child(2)")).getText();
-        Assertions.assertEquals(testPicture.getName(), submittedFormUploadPicture);
+        Assertions.assertEquals(pictureName, submittedFormUploadPicture);
 
         //Assert Address
         String submittedFormAddress = driver.findElement(By.cssSelector("tr:nth-child(9) td:nth-child(2)")).getText();
