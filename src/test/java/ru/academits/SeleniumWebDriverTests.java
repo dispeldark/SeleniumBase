@@ -54,8 +54,8 @@ public class SeleniumWebDriverTests {
         String subject1 = "Maths";
         String subject2 = "English";
         boolean selectedHobbySport = false;
-        boolean selectedHobbyMusic = false;
-        boolean selectedHobbyReading = false;
+        boolean selectedHobbyMusic = true;
+        boolean selectedHobbyReading = true;
         String pictureName = "picture.jpg";
         String currentAddress = "Novosibirsk Tsvetnoi Proezd 6, 7";
         String state = "NCR";
@@ -75,14 +75,10 @@ public class SeleniumWebDriverTests {
         if (gender.equals("Male")) {
             WebElement setMaleGender = driver.findElement(By.cssSelector("[for='gender-radio-1']"));
             mouseClick.moveToElement(setMaleGender).click().perform();
-        }
-
-        if (gender.equals("Female")) {
+        } else if (gender.equals("Female")) {
             WebElement setFemaleGender = driver.findElement(By.cssSelector("[for='gender-radio-2']"));
             mouseClick.moveToElement(setFemaleGender).click().perform();
-        }
-
-        if (gender.equals("Other")) {
+        } else {
             WebElement setOtherGender = driver.findElement(By.cssSelector("[for='gender-radio-3']"));
             mouseClick.moveToElement(setOtherGender).click().perform();
         }
@@ -150,7 +146,11 @@ public class SeleniumWebDriverTests {
 
         //Assert Gender
         String submittedFormGender = driver.findElement(By.cssSelector("tr:nth-child(3) td:nth-child(2)")).getText();
-        Assertions.assertEquals(gender, submittedFormGender);
+        if (!gender.equals("Male") && !gender.equals("Female")) {
+            Assertions.assertEquals("Other", submittedFormGender);
+        } else {
+            Assertions.assertEquals(gender, submittedFormGender);
+        }
 
         //Assert Mobile Number
         String submittedFormMobileNumber = driver.findElement(By.cssSelector("tr:nth-child(4) td:nth-child(2)")).getText();
@@ -172,24 +172,17 @@ public class SeleniumWebDriverTests {
 
         //Assert Hobbies
         String submittedFormHobbies = driver.findElement(By.cssSelector("tr:nth-child(7) td:nth-child(2)")).getText();
-        String emptyString = "";
 
         if (selectedHobbySport) {
             Assertions.assertTrue(submittedFormHobbies.contains(checkboxSportLabel));
-        } else {
-            Assertions.assertEquals(submittedFormHobbies, emptyString);
         }
 
         if (selectedHobbyMusic) {
             Assertions.assertTrue(submittedFormHobbies.contains(checkboxMusicLabel));
-        } else {
-            Assertions.assertEquals(submittedFormHobbies, emptyString);
         }
 
         if (selectedHobbyReading) {
             Assertions.assertTrue(submittedFormHobbies.contains(checkboxReadingLabel));
-        } else {
-            Assertions.assertTrue(submittedFormHobbies.equals(emptyString));
         }
 
         //Assert Picture Upload
